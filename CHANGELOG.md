@@ -21,6 +21,16 @@ Semua perubahan penting pada SysUpdater dicatat di file ini.
 *
 
 ---
+## [1.0.1] - 2026-09-04
+
+### Changed
+
+* Re-published SysUpdater with cleaned source and Debian packaging.
+
+### Fixed
+
+* Fixed Debian package layout.
+* Removed obsolete build artifacts and legacy installation paths.
 
 ## [1.0.0] - 2026-09-04
 
