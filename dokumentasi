@@ -1,0 +1,40 @@
+# Dokumentasi Teknis & Penggunaan — System Updater Pro
+
+System Updater Pro adalah aplikasi pemeliharaan sistem dan manajer paket berbasis GTK3 (C99) serta CLI interaktif yang dirancang sesuai standar kebijakan paket Debian (Debian Policy Standard).
+
+## 1. Arsitektur & Komponen Utama
+Aplikasi ini dibangun menggunakan pola MVC (Model-View-Controller) terisolasi untuk memastikan performa tinggi dan penggunaan memori yang minimal.
+
+- Model Layer (src/models/): Mengelola deteksi sistem (RAM, CPU, Disk, Kernel), parsing status paket (APT/DNF/Pacman), pemindaian PPA, dan pembacaan berkas lokalisasi Gettext (.po).
+- Controller Layer (src/controllers/): Mengatur alur logika transaksi paket, validasi sesi sudo, pembaruan state UI, serta pemantauan latar belakang (system tray timer).
+- View Layer (src/views/): Komponen GUI GTK3 yang modern dengan visual scaffolding, dukungan tema CSS dark mode, serta antarmuka CLI interaktif berbasis teks.
+
+## 2. Fitur Unggulan
+- Universal Package Engine: Mendukung otomatisasi deteksi package manager bawaan distro (Debian/Ubuntu, Fedora/RHEL, Arch Linux).
+- Persistent Hold Session: Mengunci (hold/blacklist) pembaruan paket tertentu secara permanen hingga dibuka kembali oleh pengguna.
+- PPA & Repository Manager: Menambah, melihat, dan menghapus repositori pihak ketiga dengan mudah.
+- System Cleaner & Auto Snapshot: Integrasi pembersihan junk/cache/orphan serta pembuatan restore point otomatis via Timeshift sebelum transaksi besar.
+- Gettext Localization: Dukungan multi-bahasa dinamis (Bahasa Indonesia & English) tanpa perlu restart aplikasi.
+- Interactive CLI & Background Tray: Menu terminal interaktif dan monitor system tray otomatis dengan notifikasi desktop.
+
+## 3. Panduan Kompilasi & Pemasangan
+
+### Kebutuhan Dependensi (Debian/Ubuntu)
+sudo apt update && sudo apt install -y build-essential cmake pkg-config libgtk-3-dev libnotify-bin
+
+### Kompilasi Lokal via CMake
+mkdir -p build && cd build && cmake .. && make -j$(nproc) && ./sysupdater
+
+### Pemasangan Paket .deb
+sudo apt install ./sysupdater_1.3.0_amd64.deb
+
+## 4. Perintah CLI Native
+Selain antarmuka GUI, aplikasi menyediakan perintah CLI sysupdate:
+- sysupdate --menu : Membuka menu terminal interaktif berwarna
+- sysupdate --check : Memeriksa ketersediaan pembaruan paket secara live
+- sysupdate --upgrade : Melakukan pembaruan massal (system upgrade)
+- sysupdate --uninstall : Menghapus aplikasi dari sistem secara bersih
+
+## 5. Lisensi & Hak Cipta
+Diterbitkan di bawah MIT License. Hak Cipta (c) 2026 System Updater Pro Enterprise Team (dev@firda.uz).
+

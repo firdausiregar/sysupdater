@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=SysUpdater Pro
+Comment=Pemeriksa pembaruan sistem otomatis di tray
+Exec=sysupdater --minimized
+Icon=system-software-update
+Terminal=false
+Categories=System;
+X-GNOME-Autostart-enabled=true

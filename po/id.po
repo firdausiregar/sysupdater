@@ -1,0 +1,192 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: sysupdater 1.0.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dashboard"
+msgstr "Dashboard Utama"
+
+msgid "Cek & Update"
+msgstr "Cek & Pembaruan"
+
+msgid "Katalog Aplikasi"
+msgstr "Katalog Aplikasi"
+
+msgid "Disable Update"
+msgstr "Kunci Pembaruan"
+
+msgid "Paket Terinstall"
+msgstr "Aplikasi Terpasang"
+
+msgid "Riwayat Update"
+msgstr "Catatan Riwayat"
+
+msgid "Cleaner System"
+msgstr "Pembersih Sistem"
+
+msgid "Manajemen PPA"
+msgstr "Manajemen Repositori"
+
+msgid "Jadwal Otomatis"
+msgstr "Jadwal Pembaruan"
+
+msgid "Tentang App"
+msgstr "Tentang Aplikasi"
+
+msgid "Bahasa"
+msgstr "Bahasa"
+
+msgid "Buka Aplikasi Utama"
+msgstr "Buka Aplikasi Utama"
+
+msgid "Cek Pembaruan Package"
+msgstr "Cek Pembaruan Package"
+
+msgid "Keluar"
+msgstr "Keluar"
+
+msgid "Refresh Repositori"
+msgstr "Segarkan Repositori"
+
+msgid "Pilih Semua"
+msgstr "Pilih Semua"
+
+msgid "Batal Pilih All"
+msgstr "Batal Pilih Semua"
+
+msgid "Batal Pilih"
+msgstr "Batal Pilih"
+
+msgid "Pilih"
+msgstr "Pilih"
+
+msgid "Nama Paket"
+msgstr "Nama Paket"
+
+msgid "Versi Lama"
+msgstr "Versi Saat Ini"
+
+msgid "Versi Baru"
+msgstr "Versi Baru"
+
+msgid "Progress Transaksi"
+msgstr " Kemajuan Transaksi "
+
+msgid "Siap."
+msgstr "Siap."
+
+msgid "Install Paket (Auto Snapshot)"
+msgstr "Pasang Paket (Auto Snapshot)"
+
+msgid "Kategori / Nama Aplikasi"
+msgstr "Kategori / Nama Aplikasi"
+
+msgid "Deskripsi Aplikasi"
+msgstr "Deskripsi Aplikasi"
+
+msgid "Install Aplikasi Terpilih"
+msgstr "Pasang Aplikasi Terpilih"
+
+msgid "Geser saklar ke posisi ON untuk mengunci/disable update aplikasi (Status Sesi Otomatis Tersimpan):"
+msgstr "Geser saklar ke posisi ON untuk mengunci/disable update aplikasi (Status Sesi Otomatis Tersimpan):"
+
+msgid "Nama Paket Terpasang"
+msgstr "Nama Paket Terpasang"
+
+msgid "Disable Update (Hold)"
+msgstr "Kunci Pembaruan (Hold)"
+
+msgid "Versi Terpasang"
+msgstr "Versi Terpasang"
+
+msgid "Ekspor Log ke Desktop"
+msgstr "Ekspor Log ke Desktop"
+
+msgid "Waktu & Aksi Update"
+msgstr "Waktu & Aksi Update"
+
+msgid "Bersihkan berkas cache paket tua, paket orphan tak terpakai, dan log sampah sistem untuk menghemat ruang disk Anda secara instan."
+msgstr "Bersihkan berkas cache paket tua, paket orphan tak terpakai, dan log sampah sistem untuk menghemat ruang disk Anda secara instan."
+
+msgid "Mulai Bersihkan System Junk"
+msgstr "🚀 Mulai Bersihkan Sampah Sistem"
+
+msgid "Tambah PPA Pihak Ketiga"
+msgstr "Tambah PPA Pihak Ketiga"
+
+msgid "Nama Repositori / PPA"
+msgstr "Nama Repositori / PPA"
+
+msgid "Jenis Sources"
+msgstr "Jenis Sumber"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Hapus PPA Terpilih"
+msgstr "Hapus PPA Terpilih"
+
+msgid "Interval Pengecekan Latar Belakang (Jam):"
+msgstr "Interval Pengecekan Latar Belakang (Jam):"
+
+msgid "Simpan Pengaturan Cron Timer"
+msgstr "Simpan Pengaturan Cron Timer"
+
+msgid "Monitoring Performa System"
+msgstr "💻 Monitoring Performa Sistem"
+
+msgid "Penggunaan RAM:"
+msgstr "Penggunaan RAM:"
+
+msgid "CPU:"
+msgstr "CPU:"
+
+msgid "Disk Root:"
+msgstr "Disk Root:"
+
+msgid "Terminal CLI Command Line"
+msgstr "💻 Terminal CLI Command Line"
+
+msgid "Buka menu teks berwarna interaktif langsung dari terminal:"
+msgstr "Buka menu teks berwarna interaktif langsung dari terminal:"
+
+msgid "Jalankan Menu CLI Interaktif"
+msgstr "🚀 Jalankan Menu CLI Interaktif"
+
+msgid "Operasi Pintas System"
+msgstr "⚡ Operasi Pintas Sistem"
+
+msgid "Periksa Pembaruan Paket"
+msgstr "🔍 Periksa Pembaruan Paket"
+
+msgid "Buka Katalog Aplikasi"
+msgstr "🛍️ Buka Katalog Aplikasi"
+
+msgid "RAM Usage"
+msgstr "Penggunaan RAM"
+
+msgid "Aktif"
+msgstr "Aktif"
+
+msgid "CLI_TITLE"
+msgstr "INTERACTIVE TERMINAL CLI"
+
+msgid "CLI_OPT1"
+msgstr "Cek Pembaruan Paket Live"
+
+msgid "CLI_OPT2"
+msgstr "Eksekusi Upgrade Sistem Massal"
+
+msgid "CLI_OPT3"
+msgstr "Lihat Informasi Hardware & Distro"
+
+msgid "CLI_OPT4"
+msgstr "Uninstall Aplikasi System Updater Pro"
+
+msgid "CLI_OPT0"
+msgstr "Keluar"
+
+msgid "CLI_CHOICE"
+msgstr "Pilih Opsi [0-4]: "

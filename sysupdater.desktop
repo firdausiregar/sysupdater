@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=System Updater Pro
+Comment=Manage system package updates and repositories
+Exec=sysupdater
+Icon=sysupdater
+Terminal=false
+Categories=System;Settings;Utility;
+StartupNotify=true
+StartupWMClass=sysupdater
+Keywords=update;upgrade;package;repository;apt;system;

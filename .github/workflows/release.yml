@@ -1,0 +1,595 @@
+name: SysUpdater Multi-Arch CI/CD Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+  
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+
+jobs:
+
+  # ============================================================
+  # JOB 1
+  # CHECK CODE + READ VERSION
+  # ============================================================
+  check-and-parse:
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.get_version.outputs.VERSION }}
+      tag_exists: ${{ steps.check_tag.outputs.TAG_EXISTS }}
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+
+      - name: Install Static Analysis Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck
+
+
+      - name: Run Cppcheck Analysis
+        run: |
+          cppcheck \
+            --enable=all \
+            --suppress=missingIncludeSystem \
+            src/ || true
+
+
+      - name: Extract Version from app_config.h
+        id: get_version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          VERSION=$(
+            grep -E '#define[[:space:]]+APP_VERSION' \
+            src/app_config.h |
+            awk -F'"' '{print $2}'
+          )
+
+          if [ -z "$VERSION" ]; then
+            echo "::error::APP_VERSION tidak ditemukan di src/app_config.h"
+            exit 1
+          fi
+
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+
+          echo "======================================"
+          echo " SysUpdater Version: $VERSION"
+          echo "======================================"
+
+
+      - name: Check if Release Tag Already Exists
+        id: check_tag
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git fetch --tags --force
+
+          VER="${{ steps.get_version.outputs.VERSION }}"
+
+          if git rev-parse "v$VER" >/dev/null 2>&1; then
+
+            echo "TAG_EXISTS=true" >> "$GITHUB_OUTPUT"
+
+            echo "======================================"
+            echo " Tag v$VER already exists"
+            echo " GitHub DEB release will be skipped"
+            echo " Snap can still run manually"
+            echo "======================================"
+
+          else
+
+            echo "TAG_EXISTS=false" >> "$GITHUB_OUTPUT"
+
+            echo "======================================"
+            echo " New version detected: v$VER"
+            echo " Full release will run"
+            echo "======================================"
+
+          fi
+
+
+
+  # ============================================================
+  # JOB 2
+  # BUILD MULTI ARCH DEB
+  # ============================================================
+  build-multi-arch:
+
+    needs:
+      - check-and-parse
+
+    if: needs.check-and-parse.outputs.tag_exists == 'false'
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        include:
+
+          - arch: amd64
+            platform: linux/amd64
+
+          - arch: arm64
+            platform: linux/arm64
+
+          - arch: i386
+            platform: linux/386
+
+          - arch: armhf
+            platform: linux/arm/v7
+
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+
+      - name: Build Debian Package
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "======================================"
+          echo " Building architecture:"
+          echo " DEB      = ${{ matrix.arch }}"
+          echo " Platform = ${{ matrix.platform }}"
+          echo "======================================"
+
+          docker run \
+            --rm \
+            --platform "${{ matrix.platform }}" \
+            -v "$GITHUB_WORKSPACE:/work" \
+            -w /work \
+            debian:bookworm-slim \
+            bash -c '
+
+              set -euo pipefail
+
+              export DEBIAN_FRONTEND=noninteractive
+
+              apt-get update
+
+              apt-get install -y \
+                build-essential \
+                cmake \
+                pkg-config \
+                libgtk-3-dev \
+                libnotify-dev \
+                debhelper \
+                dpkg-dev
+
+              VER="${{ needs.check-and-parse.outputs.version }}"
+
+              echo "Building SysUpdater $VER"
+
+              mkdir -p debian
+
+              printf \
+              "sysupdater (%s) stable; urgency=medium\n\n  * Automated release version %s\n\n -- Firdaus Siregar <iam@firda.uz>  %s\n" \
+              "$VER" \
+              "$VER" \
+              "$(date -R)" \
+              > debian/changelog
+
+              echo "======================================"
+              echo " Debian architecture:"
+              dpkg --print-architecture
+              echo "======================================"
+
+              dpkg-buildpackage \
+                -us \
+                -uc \
+                -b
+
+              mkdir -p /work/release-assets
+
+              find .. \
+                -maxdepth 1 \
+                -type f \
+                -name "sysupdater_*_${{ matrix.arch }}.deb" \
+                -exec cp {} /work/release-assets/ \;
+
+              echo "======================================"
+              echo " Generated DEB files:"
+              ls -lh /work/release-assets/
+              echo "======================================"
+            '
+
+
+      - name: Verify DEB Package
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if ! find release-assets \
+            -type f \
+            -name "*_${{ matrix.arch }}.deb" \
+            | grep -q .; then
+
+            echo "::error::DEB package ${{ matrix.arch }} tidak ditemukan"
+            exit 1
+
+          fi
+
+          ls -lh release-assets/
+
+
+      - name: Upload DEB Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: deb-package-${{ matrix.arch }}
+          path: release-assets/*.deb
+          if-no-files-found: error
+
+
+
+  # ============================================================
+  # JOB 3
+  # CREATE GITHUB RELEASE
+  # ============================================================
+  publish-release:
+
+    needs:
+      - check-and-parse
+      - build-multi-arch
+
+    if: needs.check-and-parse.outputs.tag_exists == 'false'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Download All DEB Artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: all-assets
+          merge-multiple: true
+
+
+      - name: Show Release Files
+        run: |
+          echo "======================================"
+          echo " Release files"
+          echo "======================================"
+
+          find all-assets \
+            -type f \
+            -maxdepth 2 \
+            -print
+
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+
+          tag_name: v${{ needs.check-and-parse.outputs.version }}
+
+          name: >-
+            SysUpdater Pro
+            v${{ needs.check-and-parse.outputs.version }}
+
+          draft: false
+
+          prerelease: false
+
+          generate_release_notes: true
+
+          files: |
+            all-assets/*.deb
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+  # ============================================================
+  # JOB 4
+  # BUILD + PUBLISH SNAP
+  # ============================================================
+
+  publish-snap:
+
+    needs:
+      - check-and-parse
+
+    if: >-
+      needs.check-and-parse.outputs.tag_exists == 'false' ||
+      github.event_name == 'workflow_dispatch'
+
+    runs-on: ubuntu-24.04
+
+    steps:
+
+      # --------------------------------------------------------
+      # CHECKOUT
+      # --------------------------------------------------------
+
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+
+      # --------------------------------------------------------
+      # INSTALL LXD
+      # --------------------------------------------------------
+
+      - name: Install and Configure LXD
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "======================================"
+          echo " Installing LXD"
+          echo "======================================"
+
+          sudo snap install \
+            lxd \
+            --channel=5.21/stable
+
+          sudo groupadd \
+            --force \
+            --system \
+            lxd
+
+          sudo usermod \
+            --append \
+            --groups lxd \
+            "$USER"
+
+          echo "======================================"
+          echo " Initialising LXD"
+          echo "======================================"
+
+          sudo lxd init --auto
+
+          # GitHub runner menggunakan Docker.
+          # Rule ini membantu mencegah konflik forwarding
+          # Docker vs LXD.
+          sudo iptables -P FORWARD ACCEPT || true
+
+          echo "======================================"
+          echo " LXD Version"
+          echo "======================================"
+
+          lxd --version
+
+          sudo lxc info
+
+
+      # --------------------------------------------------------
+      # INSTALL SNAPCRAFT
+      # --------------------------------------------------------
+
+      - name: Install Snapcraft
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "======================================"
+          echo " Installing Snapcraft"
+          echo "======================================"
+
+          sudo snap install \
+            snapcraft \
+            --classic \
+            --channel=stable
+
+          echo "======================================"
+          echo " Snapcraft Version"
+          echo "======================================"
+
+          snapcraft --version
+
+
+      # --------------------------------------------------------
+      # SET VERSION
+      # --------------------------------------------------------
+
+      - name: Prepare snapcraft.yaml
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          VER="${{ needs.check-and-parse.outputs.version }}"
+
+          echo "Setting Snap version to $VER"
+
+          sed -i \
+            "s/^version:.*/version: '$VER'/" \
+            snap/snapcraft.yaml
+
+          echo ""
+          echo "======================================"
+          echo " IMPORTANT SNAP CONFIGURATION"
+          echo "======================================"
+
+          grep -E \
+            '^(name|title|base|version|grade|confinement):' \
+            snap/snapcraft.yaml
+
+          echo "======================================"
+
+          # Explicit validation.
+          # Kalau base hilang, hentikan sebelum Snapcraft.
+          if ! grep -Eq \
+            '^base:[[:space:]]*core22[[:space:]]*$' \
+            snap/snapcraft.yaml; then
+
+            echo "::error::snap/snapcraft.yaml tidak memiliki base: core22"
+            exit 1
+
+          fi
+
+          echo "base: core22 detected successfully."
+
+
+      # --------------------------------------------------------
+      # BUILD SNAP
+      # --------------------------------------------------------
+
+      - name: Build Snap Package
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "======================================"
+          echo " Building Snap"
+          echo "======================================"
+
+          # sg menjalankan Snapcraft dengan group LXD
+          # tanpa membutuhkan logout/login runner.
+          sg lxd -c \
+            "snapcraft pack --use-lxd --verbose"
+
+          echo ""
+          echo "======================================"
+          echo " Searching generated Snap"
+          echo "======================================"
+
+          SNAP_FILE=$(
+            find "$GITHUB_WORKSPACE" \
+              -maxdepth 1 \
+              -type f \
+              -name '*.snap' \
+              -print \
+              | head -n 1
+          )
+
+          if [ -z "$SNAP_FILE" ]; then
+            echo "::error::Snapcraft selesai tetapi file .snap tidak ditemukan"
+            exit 1
+          fi
+
+          if [ ! -f "$SNAP_FILE" ]; then
+            echo "::error::Invalid Snap file: $SNAP_FILE"
+            exit 1
+          fi
+
+          echo "SNAP_PATH=$SNAP_FILE" >> "$GITHUB_ENV"
+
+          echo ""
+          echo "======================================"
+          echo " SNAP BUILD SUCCESS"
+          echo "======================================"
+
+          ls -lh "$SNAP_FILE"
+
+          echo "======================================"
+
+
+      # --------------------------------------------------------
+      # SAVE SNAP AS GITHUB ARTIFACT
+      # --------------------------------------------------------
+
+      - name: Upload Snap Build Artifact
+        uses: actions/upload-artifact@v7
+        with:
+
+          name: >-
+            sysupdater-${{
+            needs.check-and-parse.outputs.version
+            }}-snap
+
+          path: ${{ env.SNAP_PATH }}
+
+          if-no-files-found: error
+
+
+      # --------------------------------------------------------
+      # CHECK SNAP STORE SECRET
+      # --------------------------------------------------------
+
+      - name: Validate Snap Store Credentials
+        shell: bash
+
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: >-
+            ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SNAPCRAFT_STORE_CREDENTIALS:-}" ]; then
+
+            echo "::error::SNAPCRAFT_STORE_CREDENTIALS tidak tersedia."
+
+            echo ""
+            echo "Tambahkan secret:"
+            echo ""
+            echo "Settings"
+            echo "-> Secrets and variables"
+            echo "-> Actions"
+            echo "-> Repository secrets"
+            echo ""
+            echo "Nama:"
+            echo "SNAPCRAFT_STORE_CREDENTIALS"
+
+            exit 1
+
+          fi
+
+          echo "Snap Store credential secret detected."
+
+          echo ""
+          echo "======================================"
+          echo " Checking Snap Store authentication"
+          echo "======================================"
+
+          snapcraft whoami
+
+
+      # --------------------------------------------------------
+      # PUBLISH DIRECTLY USING SNAPCRAFT CLI
+      # --------------------------------------------------------
+
+      - name: Publish Snap to Edge
+        shell: bash
+
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: >-
+            ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+
+        run: |
+          set -euo pipefail
+
+          echo "======================================"
+          echo " Uploading Snap to Snap Store"
+          echo " Channel: edge"
+          echo "======================================"
+
+          if [ ! -f "$SNAP_PATH" ]; then
+            echo "::error::Snap package tidak ditemukan: $SNAP_PATH"
+            exit 1
+          fi
+
+          snapcraft upload \
+            --release=edge \
+            "$SNAP_PATH"
+
+          echo ""
+          echo "======================================"
+          echo " SNAP UPLOAD FINISHED"
+          echo "======================================"

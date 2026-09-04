@@ -1,0 +1,192 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: sysupdater 1.0.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Cek & Update"
+msgstr "Check & Update"
+
+msgid "Katalog Aplikasi"
+msgstr "App Store"
+
+msgid "Disable Update"
+msgstr "Disable Updates"
+
+msgid "Paket Terinstall"
+msgstr "Installed Packages"
+
+msgid "Riwayat Update"
+msgstr "Update History"
+
+msgid "Cleaner System"
+msgstr "System Cleaner"
+
+msgid "Manajemen PPA"
+msgstr "PPA Manager"
+
+msgid "Jadwal Otomatis"
+msgstr "Auto Schedule"
+
+msgid "Tentang App"
+msgstr "About App"
+
+msgid "Bahasa"
+msgstr "Language"
+
+msgid "Buka Aplikasi Utama"
+msgstr "Open Main App"
+
+msgid "Cek Pembaruan Package"
+msgstr "Check Package Updates"
+
+msgid "Keluar"
+msgstr "Quit"
+
+msgid "Refresh Repositori"
+msgstr "Refresh Repositories"
+
+msgid "Pilih Semua"
+msgstr "Select All"
+
+msgid "Batal Pilih All"
+msgstr "Deselect All"
+
+msgid "Batal Pilih"
+msgstr "Deselect"
+
+msgid "Pilih"
+msgstr "Select"
+
+msgid "Nama Paket"
+msgstr "Package Name"
+
+msgid "Versi Lama"
+msgstr "Current Version"
+
+msgid "Versi Baru"
+msgstr "New Version"
+
+msgid "Progress Transaksi"
+msgstr " Transaction Progress "
+
+msgid "Siap."
+msgstr "Ready."
+
+msgid "Install Paket (Auto Snapshot)"
+msgstr "Install Packages (Auto Snapshot)"
+
+msgid "Kategori / Nama Aplikasi"
+msgstr "Category / App Name"
+
+msgid "Deskripsi Aplikasi"
+msgstr "App Description"
+
+msgid "Install Aplikasi Terpilih"
+msgstr "Install Selected Apps"
+
+msgid "Geser saklar ke posisi ON untuk mengunci/disable update aplikasi (Status Sesi Otomatis Tersimpan):"
+msgstr "Toggle switch to ON to lock/disable app updates (Session State Saved Automatically):"
+
+msgid "Nama Paket Terpasang"
+msgstr "Installed Package Name"
+
+msgid "Disable Update (Hold)"
+msgstr "Disable Updates (Hold)"
+
+msgid "Versi Terpasang"
+msgstr "Installed Version"
+
+msgid "Ekspor Log ke Desktop"
+msgstr "Export Log to Desktop"
+
+msgid "Waktu & Aksi Update"
+msgstr "Time & Update Action"
+
+msgid "Bersihkan berkas cache paket tua, paket orphan tak terpakai, dan log sampah sistem untuk menghemat ruang disk Anda secara instan."
+msgstr "Clean old package cache, unused orphan packages, and system junk files to free up disk space instantly."
+
+msgid "Mulai Bersihkan System Junk"
+msgstr "🚀 Start Cleaning System Junk"
+
+msgid "Tambah PPA Pihak Ketiga"
+msgstr "Add Third-Party PPA"
+
+msgid "Nama Repositori / PPA"
+msgstr "Repository / PPA Name"
+
+msgid "Jenis Sources"
+msgstr "Source Type"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Hapus PPA Terpilih"
+msgstr "Remove Selected PPA"
+
+msgid "Interval Pengecekan Latar Belakang (Jam):"
+msgstr "Background Check Interval (Hours):"
+
+msgid "Simpan Pengaturan Cron Timer"
+msgstr "Save Cron Timer Settings"
+
+msgid "Monitoring Performa System"
+msgstr "💻 System Performance Monitoring"
+
+msgid "Penggunaan RAM:"
+msgstr "RAM Usage:"
+
+msgid "CPU:"
+msgstr "CPU:"
+
+msgid "Disk Root:"
+msgstr "Disk Root:"
+
+msgid "Terminal CLI Command Line"
+msgstr "💻 Interactive CLI Terminal"
+
+msgid "Buka menu teks berwarna interaktif langsung dari terminal:"
+msgstr "Open interactive colored text menu directly from terminal:"
+
+msgid "Jalankan Menu CLI Interaktif"
+msgstr "🚀 Launch Interactive CLI Menu"
+
+msgid "Operasi Pintas System"
+msgstr "⚡ System Shortcuts"
+
+msgid "Periksa Pembaruan Paket"
+msgstr "🔍 Check Package Updates"
+
+msgid "Buka Katalog Aplikasi"
+msgstr "🛍️ Open App Store"
+
+msgid "RAM Usage"
+msgstr "RAM Usage"
+
+msgid "Aktif"
+msgstr "Active"
+
+msgid "CLI_TITLE"
+msgstr "INTERACTIVE TERMINAL CLI"
+
+msgid "CLI_OPT1"
+msgstr "Check Live Package Updates"
+
+msgid "CLI_OPT2"
+msgstr "Execute System Mass Upgrade"
+
+msgid "CLI_OPT3"
+msgstr "View System & Hardware Specs"
+
+msgid "CLI_OPT4"
+msgstr "Uninstall System Updater Pro App"
+
+msgid "CLI_OPT0"
+msgstr "Quit"
+
+msgid "CLI_CHOICE"
+msgstr "Select Option [0-4]: "

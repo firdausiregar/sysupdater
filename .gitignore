@@ -1,0 +1,59 @@
+# Build directories
+build/
+bin/
+obj-x86_64-linux-gnu/
+.pc/
+scripts/
+
+# Debian packaging temp files
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/files
+debian/sysupdater/
+debian/sysupdater.substvars
+debian/tmp/
+
+# Package outputs & artifacts
+*.deb
+*.buildinfo
+*.changes
+*.tar.gz
+*.dsc
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+
+# --- Debian/CMake generated files (SysUpdater) ---
+/build/
+/build-*/
+/obj-*/
+/cmake-build-*/
+/packaging/opt_structure/
+/debian_pkg_*/
+
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+*.o
+*.a
+*.so
+*.out
+
+*.deb
+*.dsc
+*.changes
+*.build
+*.buildinfo
+*.debian.tar.*
+*.orig.tar.*
+*.upload
+
+/debian/.debhelper/
+/debian/sysupdater/
+/debian/files
+/debian/*.substvars
+

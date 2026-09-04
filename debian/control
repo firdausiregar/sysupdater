@@ -1,0 +1,35 @@
+Source: sysupdater
+Section: utils
+Priority: optional
+Maintainer: Firdaus Siregar <iam@firda.uz>
+Build-Depends:
+ debhelper-compat (= 13),
+ cmake,
+ pkgconf,
+ libgtk-3-dev,
+ libnotify-dev
+Standards-Version: 4.7.2
+Rules-Requires-Root: no
+Homepage: https://www.firda.uz
+Vcs-Git: https://github.com/firdausiregar/sysupdater.git
+Vcs-Browser: https://github.com/firdausiregar/sysupdater
+
+Package: sysupdater
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ apt
+Recommends:
+ sudo,
+ libnotify-bin
+Suggests:
+ software-properties-common,
+ timeshift
+Description: graphical system package updater and repository manager
+ SysUpdater is a GTK3 application for checking and applying system
+ package updates and performing common package-management tasks.
+ .
+ It provides a graphical interface and a command-line frontend for
+ update checks, package upgrades, repository management, package hold
+ state, and selected system-maintenance operations.

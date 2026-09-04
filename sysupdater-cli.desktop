@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=System Updater Pro CLI
+Comment=Manage system package updates from a terminal
+Exec=sysupdate --menu
+Icon=utilities-terminal
+Terminal=true
+Categories=System;Utility;
+Keywords=update;upgrade;package;repository;apt;terminal;

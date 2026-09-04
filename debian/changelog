@@ -1,0 +1,25 @@
+sysupdater (1.0.0-1) unstable; urgency=medium
+
+  * Added: Initial release of SysUpdater.
+  * Added: GTK3 graphical user interface.
+  * Added: Command-line interface melalui perintah `sysupdate`.
+  * Added: Pemeriksaan pembaruan paket sistem.
+  * Added: Pembaruan paket sistem.
+  * Added: Manajemen paket terinstall.
+  * Added: Fitur hold dan disable update paket.
+  * Added: System cleaner.
+  * Added: Manajemen repository dan PPA.
+  * Added: Penjadwalan update otomatis.
+  * Added: Riwayat update paket.
+  * Added: Informasi sistem pada dashboard.
+  * Added: Desktop notification menggunakan libnotify.
+  * Added: Dukungan Bahasa Indonesia dan English.
+  * Added: Desktop launcher untuk SysUpdater GUI.
+  * Added: Desktop launcher untuk SysUpdater CLI.
+  * Added: Dukungan Debian package.
+  * Added: Instalasi aplikasi menggunakan direktori standar Linux di bawah `/usr`.
+  * Changed: Struktur instalasi aplikasi menggunakan lokasi standar sistem Linux.
+  * Security: Password administrator tidak disimpan sebagai file plaintext.
+
+ -- Firdaus Siregar <iam@firda.uz>  Fri, 04 Sep 2026 21:17:19 +0700
+

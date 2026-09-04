@@ -1,0 +1,18 @@
+SysUpdater Debian packaging
+===========================
+
+The Debian source package must be built from a clean upstream source tree.
+
+Generated CMake output, compiled binaries, object files, and the historical
+packaging/opt_structure staging tree are not upstream source and must not be
+included in the orig tarball.
+
+The Debian package uses the normal filesystem hierarchy:
+- executables: /usr/bin
+- static application data: /usr/share/sysupdater
+- desktop files: /usr/share/applications
+- icon: /usr/share/pixmaps/sysupdater.png
+
+Per-user mutable state is not installed below /usr. SysUpdater stores its
+package hold-state under the user's XDG configuration directory.
+Administrator passwords are never persisted to disk.
